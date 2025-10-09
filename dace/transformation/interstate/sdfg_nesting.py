@@ -20,6 +20,7 @@ from dace.sdfg.state import LoopRegion
 from dace.transformation import transformation, helpers
 from dace.properties import make_properties, Property
 from dace import data
+from dace.utils import boostx_compat as bx
 
 
 @make_properties
@@ -589,7 +590,7 @@ class InlineSDFG(transformation.SingleStateTransformation):
                                                    reverse=False)
 
         # Re-add in/out edges to first/last nodes in subgraph
-        order = [x for x in nx.topological_sort(nstate._nx) if isinstance(x, nodes.AccessNode)]
+        order = [x for x in bx.topological_sort(nstate._nx) if isinstance(x, nodes.AccessNode)]
         for edge in removed_in_edges:
             # Find first access node that refers to this edge
             try:

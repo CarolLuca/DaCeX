@@ -5,6 +5,7 @@ from dace import SDFG, SDFGState, nodes
 from collections import deque
 from typing import List, Dict, Set, Tuple, Optional, Union
 import networkx as nx
+from dace.utils import boostx_compat as bx
 
 NodeT = str
 EdgeT = Tuple[NodeT, NodeT]
@@ -42,7 +43,7 @@ def get_uuid(element, state=None):
 
 
 def get_domtree(graph: nx.DiGraph, start_node: str, idom: Dict[str, str] = None):
-    idom = idom or nx.immediate_dominators(graph, start_node)
+    idom = idom or bx.immediate_dominators(graph, start_node)
 
     alldominated = {n: set() for n in graph.nodes}
     domtree = nx.DiGraph()
@@ -248,11 +249,11 @@ def find_loop_guards_tails_exits(sdfg_nx: nx.DiGraph):
         raise LoopExtractionError('No end node could be determined in the SDFG')
 
     # compute dominators and backedges
-    iDoms = nx.immediate_dominators(sdfg_nx, start)
+    iDoms = bx.immediate_dominators(sdfg_nx, start)
     allDom, _ = get_domtree(sdfg_nx, start, iDoms)
 
     reversed_sdfg_nx = sdfg_nx.reverse()
-    iPostDoms = nx.immediate_dominators(reversed_sdfg_nx, artificial_end_node)
+    iPostDoms = bx.immediate_dominators(reversed_sdfg_nx, artificial_end_node)
     _, postDomTree = get_domtree(reversed_sdfg_nx, artificial_end_node, iPostDoms)
 
     backedges = get_backedges(sdfg_nx, start)

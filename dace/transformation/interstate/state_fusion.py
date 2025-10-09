@@ -5,6 +5,8 @@ from typing import Dict, List, Set
 
 import networkx as nx
 
+from dace.utils import boostx_compat as bx
+
 from dace import data as dt, dtypes, registry, sdfg, subsets
 from dace.config import Config
 from dace.sdfg import nodes
@@ -326,7 +328,7 @@ class StateFusion(transformation.MultiStateTransformation):
 
                 # Find the leaf (topological) instances of the matches
                 order = [
-                    x for x in reversed(list(nx.topological_sort(first_state._nx)))
+                    x for x in reversed(list(bx.topological_sort(first_state._nx)))
                     if isinstance(x, nodes.AccessNode) and x.data in fused_cc.first_outputs
                 ]
                 # Those nodes will be the connection points upon fusion
@@ -514,7 +516,7 @@ class StateFusion(transformation.MultiStateTransformation):
 
         # NOTE: We exclude Views from the process of merging common data nodes because it may lead to double edges.
         second_mid = [
-            x for x in list(nx.topological_sort(second_state._nx)) if isinstance(x, nodes.AccessNode)
+            x for x in list(bx.topological_sort(second_state._nx)) if isinstance(x, nodes.AccessNode)
             and second_state.out_degree(x) > 0 and not isinstance(sdfg.arrays[x.data], dt.View)
         ]
 
@@ -522,7 +524,7 @@ class StateFusion(transformation.MultiStateTransformation):
         # First keep a backup of the topological sorted order of the nodes
         sdict = first_state.scope_dict()
         order = [
-            x for x in reversed(list(nx.topological_sort(first_state._nx)))
+            x for x in reversed(list(bx.topological_sort(first_state._nx)))
             if isinstance(x, nodes.AccessNode) and sdict[x] is None
         ]
         for node in second_state.nodes():

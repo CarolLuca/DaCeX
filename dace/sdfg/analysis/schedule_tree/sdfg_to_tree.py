@@ -17,6 +17,7 @@ from dace.properties import CodeBlock
 from dace.memlet import Memlet
 
 import networkx as nx
+from dace.utils import boostx_compat as bx
 import time
 import sys
 
@@ -718,7 +719,7 @@ def _generate_views_in_scope(
 
     # Traverse in order and deduplicate
     already_generated = set()
-    for n in nx.topological_sort(g):
+    for n in bx.topological_sort(g):
         if n in node_to_stree and n not in already_generated:
             result.append(node_to_stree[n])
             already_generated.add(n)

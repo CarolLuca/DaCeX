@@ -24,6 +24,7 @@ from dace.codegen.targets.target import TargetCodeGenerator
 from dace.codegen import cppunparse
 from dace.sdfg.state import ControlFlowRegion, SDFGState, StateSubgraphView
 from dace.sdfg.utils import is_fpga_kernel
+from dace.utils import boostx_compat as bx
 from dace.symbolic import evaluate
 from collections import defaultdict
 
@@ -509,7 +510,7 @@ class FPGACodeGen(TargetCodeGenerator):
         all_nodes = graph.nodes()
 
         # Use topological sort to order kernels according to their dependencies
-        for kernel_id in nx.topological_sort(kernels_graph):
+        for kernel_id in bx.topological_sort(kernels_graph):
             # Return the subgraph and the kernel id
             subgraph_views.append((ScopeSubgraphView(graph, [n for n in all_nodes if n in subgraphs[kernel_id]],
                                                      None), kernel_id))

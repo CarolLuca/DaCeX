@@ -9,6 +9,7 @@ from dace import sdfg as sd, symbolic
 from dace.sdfg import graph as gr, utils as sdutil, InterstateEdge
 from dace.sdfg.state import ControlFlowRegion, ControlFlowBlock
 from dace.transformation import transformation
+from dace.utils import boostx_compat as bx
 
 
 # NOTE: This class extends PatternTransformation directly in order to not show up in the matches
@@ -191,7 +192,7 @@ class DetectLoop(transformation.PatternTransformation):
             return None
 
         # All nodes inside loop must be dominated by loop guard
-        dominators = nx.dominance.immediate_dominators(graph.nx, graph.start_block)
+        dominators = bx.immediate_dominators(graph.nx, graph.start_block)
         postdominators = sdutil.postdominators(graph, True)
         loop_nodes = self.loop_body()
         # If the exit state is in the loop nodes, this is not a valid loop
@@ -287,7 +288,7 @@ class DetectLoop(transformation.PatternTransformation):
             return None
 
         # All nodes inside loop must be dominated by loop start
-        dominators = nx.dominance.immediate_dominators(graph.nx, graph.start_block)
+        dominators = bx.immediate_dominators(graph.nx, graph.start_block)
         if begin is ltest:
             loop_nodes = [begin]
         else:

@@ -16,6 +16,7 @@ from dace.sdfg.utils import dfs_conditional
 from dace.transformation import pass_pipeline as ppl
 from dace.transformation import transformation
 from dace.transformation.interstate.loop_lifting import LoopLifting
+from dace.utils import boostx_compat as bx
 
 
 @properties.make_properties
@@ -133,7 +134,7 @@ class ControlFlowRaising(ppl.Pass):
                 dummy_exit = region.add_state('__DACE_DUMMY')
                 for s in sinks:
                     region.add_edge(s, dummy_exit, InterstateEdge())
-            idom = nx.immediate_dominators(region.nx, region.start_block)
+            idom = bx.immediate_dominators(region.nx, region.start_block)
             alldoms = cfg_analysis.all_dominators(region, idom)
             branch_merges = cfg_analysis.branch_merges(region, idom, alldoms)
 
@@ -232,7 +233,7 @@ class ControlFlowRaising(ppl.Pass):
                 continue
 
             # Compute immediate dominators
-            idom: Dict[ControlFlowBlock, ControlFlowBlock] = nx.immediate_dominators(cfg.nx, cfg.start_block)
+            idom: Dict[ControlFlowBlock, ControlFlowBlock] = bx.immediate_dominators(cfg.nx, cfg.start_block)
 
             back_edges = set([(e.src, e.dst) for e in cfg_analysis.back_edges(cfg, idom)])
 

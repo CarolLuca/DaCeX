@@ -21,6 +21,7 @@ from dace import config, data as dt, dtypes, memlet as mm, subsets as sbs
 from dace.cli.progress import optional_progressbar
 from typing import Any, Callable, Dict, Generator, List, Optional, Set, Sequence, Tuple, Type, Union
 from dace.properties import CodeBlock
+from dace.utils import boostx_compat as bx
 
 
 def node_path_graph(*args) -> gr.OrderedDiGraph:
@@ -1742,7 +1743,7 @@ def postdominators(
         return None
     else:
         sink = sink_nodes[0]
-    ipostdom: CFBlockDictT = nx.immediate_dominators(cfg._nx.reverse(), sink)
+    ipostdom: CFBlockDictT = bx.immediate_dominators(cfg._nx.reverse(), sink)
 
     if return_alldoms:
         allpostdoms = cfg_analysis.all_dominators(cfg, ipostdom)
@@ -2082,7 +2083,7 @@ def get_control_flow_block_dominators(sdfg: SDFG,
                     added_sinks[cfg] = cfg.add_state()
                     for s in sinks:
                         cfg.add_edge(s, added_sinks[cfg], InterstateEdge())
-                idom.update(nx.immediate_dominators(cfg.nx, cfg.start_block))
+                idom.update(bx.immediate_dominators(cfg.nx, cfg.start_block))
         # Compute the transitive relationship of immediate dominators:
         # - For every start state in a control flow region, the immediate dominator is the immediate dominator of the
         #   parent control flow region.
@@ -2142,7 +2143,7 @@ def get_control_flow_block_dominators(sdfg: SDFG,
                 else:
                     sink = sink_nodes[0]
                     sinks_per_cfg[cfg] = sink
-                ipostdom.update(nx.immediate_dominators(cfg._nx.reverse(), sink))
+                ipostdom.update(bx.immediate_dominators(cfg._nx.reverse(), sink))
 
         # Compute the transitive relationship of immediate postdominators, similar to how it works for immediate
         # dominators, but inverse.

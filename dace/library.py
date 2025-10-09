@@ -4,8 +4,10 @@ import sys
 import types
 from typing import Set, List
 import contextlib
-import networkx as nx
 import types
+import networkx as nx
+
+from dace.utils import boostx_compat as bx
 
 import dace.properties
 from dace.sdfg.nodes import LibraryNode, full_class_path
@@ -189,7 +191,7 @@ def get_environments_and_dependencies(names: Set[str]) -> List:
             dep_graph.add_edge(dep, env)
 
     try:
-        return list(nx.topological_sort(dep_graph))
+        return list(bx.topological_sort(dep_graph))
     except nx.NetworkXUnfeasible:
         raise ValueError("Detected cycle in dependency graph.")
 
