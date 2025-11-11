@@ -4,11 +4,10 @@
 from collections import deque, OrderedDict
 import itertools
 import uuid
-import boostx as nx
-from boostx.utils import pairwise as bx_pairwise
+import networkx as nx
 from dace.dtypes import deduplicate
 import dace.serialize
-from typing import Any, Callable, Generic, Iterable, List, Optional, Sequence, TypeVar, Union
+from typing import Any, Callable, Generic, Iterable, List, Optional, Sequence, Set, TypeVar, Union
 
 
 class NodeNotFoundError(Exception):
@@ -411,7 +410,7 @@ class Graph(Generic[NodeT, EdgeT]):
         :param as_edges: If True, returns list of edges instead of nodes.
         """
         if as_edges:
-            for path in map(bx_pairwise, nx.all_simple_paths(self._nx, source_node, dest_node)):
+            for path in map(nx.utils.pairwise, nx.all_simple_paths(self._nx, source_node, dest_node)):
                 yield [Edge(e[0], e[1], self._nx.edges[e]['data']) for e in path]
         else:
             yield from nx.all_simple_paths(self._nx, source_node, dest_node)
@@ -618,7 +617,6 @@ class MultiDiGraph(DiGraph[NodeT, EdgeT], Generic[NodeT, EdgeT]):
     def is_multigraph(self) -> bool:
         return True
 
-
 class MultiDiConnectorGraph(MultiDiGraph[NodeT, EdgeT], Generic[NodeT, EdgeT]):
 
     def __init__(self):
@@ -740,15 +738,33 @@ class OrderedDiGraph(Graph[NodeT, EdgeT], Generic[NodeT, EdgeT]):
         return nx.simple_cycles(self._nx)
 
     def has_cycles(self) -> bool:
-        try:
-            sources = self.source_nodes()
-            if len(sources) == 0:
-                nx.find_cycle(self._nx)
-            else:
-                nx.find_cycle(self._nx, sources)
-            return True
-        except nx.NetworkXNoCycle:
+        """
+        Detect if the graph has cycles without relying on BoostX internals,
+        which assume hashable nodes. DaCe graphs may contain unhashable nodes
+        (e.g., list-backed constructs), so fall back to an ID-based DFS.
+        """
+
+        visited: Set[int] = set()
+        active: Set[int] = set()
+
+        def dfs(node: NodeT) -> bool:
+            nid = id(node)
+            if nid in active:
+                return True
+            if nid in visited:
+                return False
+            visited.add(nid)
+            active.add(nid)
+            for edge in self.out_edges(node):
+                if dfs(edge.dst):
+                    return True
+            active.remove(nid)
             return False
+
+        for node in self.nodes():
+            if dfs(node):
+                return True
+        return False
 
     def edges_between(self, source: NodeT, destination: NodeT) -> List[Edge[EdgeT]]:
         if (source, destination) in self._edges:
@@ -759,7 +775,6 @@ class OrderedDiGraph(Graph[NodeT, EdgeT], Generic[NodeT, EdgeT]):
     def reverse(self):
         """Reverses source and destination of all edges in the graph"""
         raise self._not_implemented_error()
-
 
 class OrderedMultiDiGraph(OrderedDiGraph[NodeT, EdgeT], Generic[NodeT, EdgeT]):
     """ Directed multigraph where nodes and edges are returned in the order

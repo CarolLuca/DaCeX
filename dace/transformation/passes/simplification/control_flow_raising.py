@@ -244,7 +244,7 @@ class ControlFlowRaising(ppl.Pass):
             structured_edges = dfs_tree_edges | back_edges
 
             # Unstructured edges: all edges not in structured set
-            unstructured_edges = set(cfg.nx.edges) - structured_edges
+            unstructured_edges = set(cfg.nx.edges()) - structured_edges
 
             # Find the single entry / single exit region around the unstructured edges and turn it into a region
             # of unstructured control flow.

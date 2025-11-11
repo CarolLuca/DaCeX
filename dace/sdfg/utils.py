@@ -1329,7 +1329,7 @@ def fuse_states(sdfg: SDFG, permissive: bool = False, progress: bool = None) -> 
     for sd in sdfg.all_sdfgs_recursive():
         for cfg in sd.all_control_flow_regions():
             while True:
-                edges = list(cfg.nx.edges)
+                edges = list(cfg.nx.edges())
                 applied = 0
                 skip_nodes = set()
                 for u, v in edges:
