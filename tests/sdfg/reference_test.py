@@ -7,7 +7,7 @@ from dace.transformation.passes.analysis import FindReferenceSources
 from dace.transformation.passes.reference_reduction import ReferenceToView
 import numpy as np
 import pytest
-import networkx as nx
+import boostx as nx
 
 
 def test_frontend_reference():

@@ -1,5 +1,5 @@
 from enum import Enum, Flag
-from networkx import DiGraph
+from boostx import DiGraph
 from dace.memlet import Memlet
 from collections import defaultdict
 from dace.sdfg.utils import dfs_topological_sort

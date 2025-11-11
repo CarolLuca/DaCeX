@@ -3,7 +3,6 @@ import ast
 from collections import OrderedDict
 import copy
 import itertools
-import networkx as nx
 import re
 import sys
 import time

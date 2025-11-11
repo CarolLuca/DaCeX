@@ -3,7 +3,7 @@
 import copy
 import itertools
 import warnings
-from networkx import MultiDiGraph
+from boostx import MultiDiGraph
 
 from dace.properties import CodeBlock
 from dace.sdfg.state import AbstractControlFlowRegion, ConditionalBlock, ControlFlowBlock, ControlFlowRegion, LoopRegion, ReturnBlock
@@ -1270,7 +1270,9 @@ def simplify_state(state: SDFGState, remove_views: bool = False) -> MultiDiGraph
     for n in scope_children[None]:
         if isinstance(n, nodes.EntryNode):
             G.add_edges_from([(n, x) for (y, x) in G.out_edges(state.exit_node(n))])
-            G.remove_nodes_from(scope_children[n])
+            for child in list(scope_children[n]):
+                if child in G.nodes():
+                    G.remove_node(child)
     # Remove all nodes that are not AccessNodes or have incoming
     # wcr edges and connect their predecessors and successors
     for n in state.nodes():

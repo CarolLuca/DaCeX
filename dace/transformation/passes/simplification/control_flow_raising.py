@@ -4,7 +4,7 @@ import ast
 from typing import Dict, List, Optional, Tuple
 import warnings
 
-import networkx as nx
+import boostx as nx
 import sympy
 
 from dace import properties

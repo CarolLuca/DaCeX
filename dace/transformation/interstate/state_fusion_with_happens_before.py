@@ -3,7 +3,7 @@
 
 from typing import Dict, List, Set
 
-import networkx as nx
+import boostx as nx
 
 from dace.utils import boostx_compat as bx
 

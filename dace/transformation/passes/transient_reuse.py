@@ -1,7 +1,7 @@
 # Copyright 2019-2022 ETH Zurich and the DaCe authors. All rights reserved.
 from typing import Optional, Set
 
-import networkx as nx
+import boostx as nx
 
 from dace import SDFG, properties
 from dace.sdfg import nodes
@@ -66,7 +66,9 @@ class TransientReuse(ppl.Pass):
             for n in scope_children[None]:
                 if isinstance(n, nodes.EntryNode):
                     G.add_edges_from([(n, x) for (y, x) in G.out_edges(state.exit_node(n))])
-                    G.remove_nodes_from(scope_children[n])
+                    for child in list(scope_children[n]):
+                        if child in G.nodes():
+                            G.remove_node(child)
 
             # Remove all nodes that are not AccessNodes or have incoming wcr edges
             # and connect their predecessors and successors

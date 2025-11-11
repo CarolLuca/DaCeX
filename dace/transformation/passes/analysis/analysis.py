@@ -14,8 +14,8 @@ from dace.sdfg import nodes as nd, utils as sdutil
 from dace.sdfg.analysis import cfg as cfg_analysis
 from dace.sdfg.propagation import align_memlet
 from typing import Dict, Iterable, List, Set, Tuple, Any, Optional, Union
-import networkx as nx
-from networkx.algorithms import shortest_paths as nxsp
+import boostx as nx
+from boostx.algorithms import shortest_paths as nxsp
 from dace.utils import boostx_compat as bx
 
 from dace.transformation.passes.analysis import loop_analysis

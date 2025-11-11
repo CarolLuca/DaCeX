@@ -4,7 +4,8 @@
 from collections import deque, OrderedDict
 import itertools
 import uuid
-import networkx as nx
+import boostx as nx
+from boostx.utils import pairwise as bx_pairwise
 from dace.dtypes import deduplicate
 import dace.serialize
 from typing import Any, Callable, Generic, Iterable, List, Optional, Sequence, TypeVar, Union
@@ -410,7 +411,7 @@ class Graph(Generic[NodeT, EdgeT]):
         :param as_edges: If True, returns list of edges instead of nodes.
         """
         if as_edges:
-            for path in map(nx.utils.pairwise, nx.all_simple_paths(self._nx, source_node, dest_node)):
+            for path in map(bx_pairwise, nx.all_simple_paths(self._nx, source_node, dest_node)):
                 yield [Edge(e[0], e[1], self._nx.edges[e]['data']) for e in path]
         else:
             yield from nx.all_simple_paths(self._nx, source_node, dest_node)

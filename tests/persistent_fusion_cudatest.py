@@ -1,7 +1,7 @@
 # Copyright 2019-2025 ETH Zurich and the DaCe authors. All rights reserved.
 
 import numpy as np
-import networkx as nx
+import boostx as nx
 import dace
 from dace.sdfg.graph import SubgraphView
 from dace.sdfg.state import BreakBlock, LoopRegion

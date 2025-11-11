@@ -5,7 +5,7 @@ import collections
 import copy
 import os
 import warnings
-import networkx as nx
+import boostx as nx
 import time
 
 import dace.sdfg.nodes

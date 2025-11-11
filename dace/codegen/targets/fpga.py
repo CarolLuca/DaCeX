@@ -496,7 +496,7 @@ class FPGACodeGen(TargetCodeGenerator):
         # them. Sort according kernel dependencies order.
 
         # Build a dependency graph
-        import networkx as nx
+        import boostx as nx
         kernels_graph = nx.DiGraph()
         for k in subgraphs.keys():
             # we could have no dependencies at all

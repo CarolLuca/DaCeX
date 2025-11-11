@@ -5,7 +5,7 @@ import types
 from typing import Set, List
 import contextlib
 import types
-import networkx as nx
+import boostx as nx
 
 from dace.utils import boostx_compat as bx
 

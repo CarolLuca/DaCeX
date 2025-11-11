@@ -1,7 +1,7 @@
 # Copyright 2019-2024 ETH Zurich and the DaCe authors. All rights reserved.
 """ Contains inter-state transformations of an SDFG to run on an FPGA. """
 
-import networkx as nx
+import boostx as nx
 
 from dace import properties
 from dace.sdfg.sdfg import SDFG

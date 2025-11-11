@@ -3,8 +3,7 @@
 Functionality that allows users to "cut out" parts of an SDFG in a smart way (i.e., memory preserving) for localized
 testing or optimization.
 """
-import networkx as nx
-from networkx.algorithms.flow import edmondskarp
+import boostx as nx
 import sympy as sp
 from collections import deque
 import copy
@@ -785,7 +784,7 @@ def _reduce_in_configuration(state: SDFGState,
                     vol = vol.subs(symbols_map)
                 proxy_graph.add_edge(source, node, capacity=vol)
 
-    _, (_, non_reachable) = nx.minimum_cut(proxy_graph, source, sink, flow_func=edmondskarp.edmonds_karp)
+    _, (_, non_reachable) = nx.minimum_cut(proxy_graph, source, sink, flow_func=nx.edmonds_karp)
 
     non_reachable -= {sink}
     if len(non_reachable) > 0:

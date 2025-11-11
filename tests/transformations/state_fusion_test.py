@@ -2,7 +2,7 @@
 import dace
 from dace.transformation import transformation
 from dace.transformation.interstate import StateFusion
-import networkx as nx
+import boostx as nx
 import numpy as np
 
 

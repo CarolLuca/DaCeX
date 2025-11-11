@@ -4,7 +4,7 @@ import functools
 import warnings
 from typing import TYPE_CHECKING, Dict, List, Optional, Set, Tuple, Union
 
-import networkx as nx
+import boostx as nx
 import sympy
 from six import StringIO
 

@@ -6,7 +6,7 @@ from numpy.core.numeric import allclose
 import pytest
 import dace
 import dace.libraries.blas
-import networkx as nx
+import boostx as nx
 import numpy as np
 
 from dace.transformation.dataflow import streaming_memory as sm, MapExpansion

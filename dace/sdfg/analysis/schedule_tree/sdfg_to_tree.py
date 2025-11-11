@@ -16,7 +16,7 @@ from dace.transformation.helpers import unsqueeze_memlet
 from dace.properties import CodeBlock
 from dace.memlet import Memlet
 
-import networkx as nx
+import boostx as nx
 from dace.utils import boostx_compat as bx
 import time
 import sys

@@ -733,8 +733,8 @@ SDFG Builder API
 
 When writing frontends for DaCe and when transforming SDFGs, it is necessary to interact with the SDFG directly.
 The SDFG builder API provides a set of functions that allow the user to create SDFGs programmatically. The API is
-similar to graph manipulation APIs, such as `NetworkX <https://networkx.org/>`_ (in fact, the SDFG is internally
-represented as an ordered NetworkX graph).
+similar to graph manipulation APIs, such as `BoostX <https://github.com/CarolLuca/BoostX>`_ (in fact, the SDFG is
+internally represented as an ordered BoostX graph).
 
 The entire API is organized around methods of the :class:`~dace.sdfg.sdfg.SDFG` and :class:`~dace.sdfg.state.SDFGState`
 classes. Additionally, helper functions in :mod:`dace.sdfg.utils` and :mod:`dace.transformation.helpers` can be used
